@@ -6,6 +6,7 @@ buttons  = require 'sdk/ui/button/action'
 prefs    = require 'sdk/simple-prefs'
 
 class MiniSocialButton
+  ttl: 1800 * 1000
   constructor: () ->
     @init()
     @cache = {}
@@ -30,7 +31,7 @@ class MiniSocialButton
     tabs.on 'ready', @update
 
   set: (url) =>
-    count = @cache[url]
+    count = @cache[url].count
     if count > 9999
       count = 9999
       @button.badgeColor = '#ff0000'
@@ -44,12 +45,14 @@ class MiniSocialButton
       @button.badge = null
       return
 
-    if @cache[loc]?
+    if @cache[loc]? and Number(new Date()) < @cache[loc].expire
       @set loc
       return
 
     @cache = {} if Object.keys(@cache).length >= 100
-    @cache[loc] = '...'
+    @cache[loc] =
+      expire: Number(new Date()) + @ttl
+      count: '...'
 
     api = @api loc
     self = @
@@ -57,7 +60,7 @@ class MiniSocialButton
       url: api.url
       content: api.params
       onComplete: ->
-        self.cache[loc] = Number api.count(@response.text)
+        self.cache[loc].count = Number api.count(@response.text)
         self.set loc
     .get()
 

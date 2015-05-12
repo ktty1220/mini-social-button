@@ -13,6 +13,8 @@
   prefs = require('sdk/simple-prefs');
 
   MiniSocialButton = (function() {
+    MiniSocialButton.prototype.ttl = 1800 * 1000;
+
     function MiniSocialButton() {
       this.update = bind(this.update, this);
       this.set = bind(this.set, this);
@@ -53,7 +55,7 @@
 
     MiniSocialButton.prototype.set = function(url) {
       var count;
-      count = this.cache[url];
+      count = this.cache[url].count;
       if (count > 9999) {
         count = 9999;
         this.button.badgeColor = '#ff0000';
@@ -70,21 +72,24 @@
         this.button.badge = null;
         return;
       }
-      if (this.cache[loc] != null) {
+      if ((this.cache[loc] != null) && Number(new Date()) < this.cache[loc].expire) {
         this.set(loc);
         return;
       }
       if (Object.keys(this.cache).length >= 100) {
         this.cache = {};
       }
-      this.cache[loc] = '...';
+      this.cache[loc] = {
+        expire: Number(new Date()) + this.ttl,
+        count: '...'
+      };
       api = this.api(loc);
       self = this;
       return requests.Request({
         url: api.url,
         content: api.params,
         onComplete: function() {
-          self.cache[loc] = Number(api.count(this.response.text));
+          self.cache[loc].count = Number(api.count(this.response.text));
           return self.set(loc);
         }
       }).get();
