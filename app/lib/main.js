@@ -13,8 +13,6 @@
   prefs = require('sdk/simple-prefs');
 
   MiniSocialButton = (function() {
-    MiniSocialButton.prototype.ttl = 1800 * 1000;
-
     function MiniSocialButton() {
       this.update = bind(this.update, this);
       this.set = bind(this.set, this);
@@ -66,13 +64,14 @@
     };
 
     MiniSocialButton.prototype.update = function() {
-      var api, loc, self;
+      var api, loc, ref, ref1, self, ttl;
       loc = this.location();
       if (/(about:|file:|\/\/(localhost|\d+\.\d+\.\d+\.\d+))/.test(loc)) {
         this.button.badge = null;
         return;
       }
-      if ((this.cache[loc] != null) && Number(new Date()) < this.cache[loc].expire) {
+      ttl = prefs.prefs.ttl * 60000;
+      if (Number(new Date()) < ((ref = (ref1 = this.cache[loc]) != null ? ref1.checked_at : void 0) != null ? ref : 0) + ttl) {
         this.set(loc);
         return;
       }
@@ -80,7 +79,7 @@
         this.cache = {};
       }
       this.cache[loc] = {
-        expire: Number(new Date()) + this.ttl,
+        checked_at: Number(new Date()),
         count: '...'
       };
       api = this.api(loc);
