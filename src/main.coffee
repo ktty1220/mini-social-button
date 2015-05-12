@@ -1,3 +1,5 @@
+# about:config
+# extensions.jid1-DyFcns9MkdCHWw.sdk.console.logLevel: true
 requests = require 'sdk/request'
 tabs     = require 'sdk/tabs'
 buttons  = require 'sdk/ui/button/action'
@@ -63,7 +65,10 @@ class HatenaSocialButton extends MiniSocialButton
   config:
     service: 'hatena'
     label: 'Hatena Bookmark'
-  openUrl: () => "http://b.hatena.ne.jp/entry/#{@location().replace /^\w+:\/\//, ''}"
+  openUrl: () =>
+    loc = @location()
+    s = if /^https:/.test loc then 's/' else ''
+    "http://b.hatena.ne.jp/entry/#{s}#{loc.replace /^\w+:\/\//, ''}"
   api: (url) =>
     url: 'http://api.b.st-hatena.com/entry.count'
     params: url: url

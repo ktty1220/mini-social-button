@@ -6,7 +6,7 @@
   "icon": "icon48.png",
   "author": "ktty1220",
   "license": "MIT",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "preferences": [{
     "description": "デフォルトでは開いたタブをアクティブにします。",
     "type": "bool",

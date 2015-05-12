@@ -109,7 +109,10 @@
     };
 
     HatenaSocialButton.prototype.openUrl = function() {
-      return "http://b.hatena.ne.jp/entry/" + (this.location().replace(/^\w+:\/\//, ''));
+      var loc, s;
+      loc = this.location();
+      s = /^https:/.test(loc) ? 's/' : '';
+      return "http://b.hatena.ne.jp/entry/" + s + (loc.replace(/^\w+:\/\//, ''));
     };
 
     HatenaSocialButton.prototype.api = function(url) {
