@@ -1,5 +1,5 @@
 # about:config
-# extensions.jid1-DyFcns9MkdCHWw.sdk.console.logLevel: true
+# extensions.jid1-DyFcns9MkdCHWw@jetpack.sdk.console.logLevel: "all"
 requests = require 'sdk/request'
 tabs     = require 'sdk/tabs'
 buttons  = require 'sdk/ui/button/action'
