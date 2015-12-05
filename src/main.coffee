@@ -30,6 +30,7 @@ class MiniSocialButton
     tabs.on 'ready', @update
 
   set: (url) =>
+    return if @config.service is 'twitter'
     count = @cache[url].count
     if count > 9999
       count = 9999
@@ -56,13 +57,14 @@ class MiniSocialButton
 
     api = @api loc
     self = @
-    requests.Request
-      url: api.url
-      content: api.params
-      onComplete: ->
-        self.cache[loc].count = Number api.count(@response.text)
-        self.set loc
-    .get()
+    if api.url?
+      requests.Request
+        url: api.url
+        content: api.params
+        onComplete: ->
+          self.cache[loc].count = Number api.count(@response.text)
+          self.set loc
+      .get()
 
 class HatenaSocialButton extends MiniSocialButton
   config:
@@ -83,7 +85,7 @@ class TwitterSocialButton extends MiniSocialButton
     label: 'Twitter'
   openUrl: () => "https://twitter.com/search/?q=#{encodeURIComponent @location()}"
   api: (url) =>
-    url: 'http://urls.api.twitter.com/1/urls/count.json'
+    url: null #'http://urls.api.twitter.com/1/urls/count.json'
     params: url: url
     count: (res) =>
       data = JSON.parse res

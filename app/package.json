@@ -2,11 +2,11 @@
   "name": "mini-social-button",
   "title": "mini SocialButton",
   "id": "jid1-DyFcns9MkdCHWw",
-  "description": "ツールバーにソーシャルカウントを表示するボタンを設置します。ボタンを押すとコメント一覧ページを別タブで開きます。", 
+  "description": "ツールバーにソーシャルカウントを表示するボタンを設置します。ボタンを押すとコメント一覧ページを別タブで開きます。",
   "icon": "icon48.png",
   "author": "ktty1220",
   "license": "MIT",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "preferences": [{
     "description": "デフォルトでは開いたタブをアクティブにします。",
     "type": "bool",

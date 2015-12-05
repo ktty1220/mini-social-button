@@ -53,6 +53,9 @@
 
     MiniSocialButton.prototype.set = function(url) {
       var count;
+      if (this.config.service === 'twitter') {
+        return;
+      }
       count = this.cache[url].count;
       if (count > 9999) {
         count = 9999;
@@ -84,14 +87,16 @@
       };
       api = this.api(loc);
       self = this;
-      return requests.Request({
-        url: api.url,
-        content: api.params,
-        onComplete: function() {
-          self.cache[loc].count = Number(api.count(this.response.text));
-          return self.set(loc);
-        }
-      }).get();
+      if (api.url != null) {
+        return requests.Request({
+          url: api.url,
+          content: api.params,
+          onComplete: function() {
+            self.cache[loc].count = Number(api.count(this.response.text));
+            return self.set(loc);
+          }
+        }).get();
+      }
     };
 
     return MiniSocialButton;
@@ -157,7 +162,7 @@
 
     TwitterSocialButton.prototype.api = function(url) {
       return {
-        url: 'http://urls.api.twitter.com/1/urls/count.json',
+        url: null,
         params: {
           url: url
         },
